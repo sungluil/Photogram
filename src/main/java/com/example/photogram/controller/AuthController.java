@@ -1,19 +1,24 @@
 package com.example.photogram.controller;
 
-import com.example.photogram.domain.User;
-import com.example.photogram.domain.UserDTO;
 import com.example.photogram.dto.SignupDto;
+import com.example.photogram.handler.CustomValidationException;
 import com.example.photogram.repository.UserRepository;
 import com.example.photogram.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Optional;
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
+@Slf4j
 public class AuthController {
 
     private final UserRepository userRepository;
@@ -32,13 +37,19 @@ public class AuthController {
     // 회원가입버튼 -> /auth/signup -> /auth/signin
     // 회원가입버튼 X
     @PostMapping("/auth/signup")
-    public String signup(SignupDto dto) { // key=value (x-www-form-urlencoded)
-        System.out.println(dto);
-        Optional<User> byUsername = userRepository.findByUsername(dto.getUsername());
-
-        if(byUsername.isPresent()) {
-            throw new IllegalArgumentException("존재하는 유저네임입니다.");
+    public String signup(@Valid SignupDto dto, BindingResult bindingResult) { // key=value (x-www-form-urlencoded)
+        log.info("dto = {}", dto);
+        if(bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            for(FieldError error : bindingResult.getFieldErrors()) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+                System.out.println("====================");
+                System.out.println(error.getDefaultMessage());
+                System.out.println("====================");
+            }
+            throw new CustomValidationException("유효성 검사 실패함", errorMap);
         }
+
         userService.signUp(dto);
         return "auth/signin";
     }
