@@ -7,7 +7,7 @@ import com.example.photogram.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,11 +37,11 @@ public class AuthController {
     // 회원가입버튼 -> /auth/signup -> /auth/signin
     // 회원가입버튼 X
     @PostMapping("/auth/signup")
-    public String signup(@Valid SignupDto dto, BindingResult bindingResult) { // key=value (x-www-form-urlencoded)
+    public String signup(@Valid SignupDto dto, Errors errors) { // key=value (x-www-form-urlencoded)
         log.info("dto = {}", dto);
-        if(bindingResult.hasErrors()) {
+        if(errors.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
-            for(FieldError error : bindingResult.getFieldErrors()) {
+            for(FieldError error : errors.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
                 System.out.println("====================");
                 System.out.println(error.getDefaultMessage());

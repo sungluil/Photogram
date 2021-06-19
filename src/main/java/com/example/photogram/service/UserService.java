@@ -35,8 +35,8 @@ public class UserService {
         errorMap.put("error", "존재하는 아이디입니다.");
 
 
-        Optional<User> byUsername = userRepository.findByUsername(dto.getUsername());
-        if(byUsername.isPresent()) {
+        User byUsername = userRepository.findByUsername(dto.getUsername());
+        if(byUsername != null) {
             throw new CustomValidationException("유효성 검사 실패함", errorMap);
         }
         UserDTO userDTO = new UserDTO();
