@@ -39,8 +39,8 @@ public class AuthController {
     @PostMapping("/auth/signup")
     public String signup(@Valid SignupDto dto, Errors errors) { // key=value (x-www-form-urlencoded)
         log.info("dto = {}", dto);
+        Map<String, String> errorMap = new HashMap<>();
         if(errors.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
             for(FieldError error : errors.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
                 System.out.println("====================");

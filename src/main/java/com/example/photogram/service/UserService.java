@@ -3,7 +3,10 @@ package com.example.photogram.service;
 import com.example.photogram.domain.User;
 import com.example.photogram.domain.UserDTO;
 import com.example.photogram.dto.SignupDto;
+import com.example.photogram.dto.UserUpdateDto;
+import com.example.photogram.handler.CustomValidationApiException;
 import com.example.photogram.handler.CustomValidationException;
+import com.example.photogram.mapper.EntityMapper;
 import com.example.photogram.mapper.UserDTOMapper;
 import com.example.photogram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +15,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.FieldError;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +28,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserDTOMapper userDTOMapper;
+    private final EntityMapper entityMapper;
+
 
     @Transactional
     public UserDTO signUp(SignupDto dto) {
@@ -45,9 +49,27 @@ public class UserService {
         userDTO.setRole("ROLE_USER"); // 관리자 ROLE_ADMIN
         log.info("userDTO = {}", userDTO);
 
-        userRepository.save(userDTOMapper.toEntity(userDTO));
+        User save = userRepository.save(userDTOMapper.toEntity(userDTO));
 
+        log.info("save = {}", save);
 
         return userDTO;
+    }
+
+    @Transactional
+    public UserDTO update(Long id, UserUpdateDto userDTO) {
+        System.out.println("업데이트 실행됨>>>>>>>>>>>>>>>>>>>");
+        User user = userRepository.findById(id).orElseThrow(()->new CustomValidationApiException("존재하는 아이디 입니다."));
+        //UserDTO user = userRepository.findById(id).map(userDTOMapper::toDto).orElseThrow(()->new CustomValidationApiException("존재하는 아이디 입니다."));
+
+        user.setName(userDTO.getName());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        user.setWebsite(userDTO.getWebsite());
+        user.setBio(userDTO.getBio());
+        user.setPhone(userDTO.getPhone());
+        user.setGender(userDTO.getGender());
+
+
+        return userDTOMapper.toDto(user);
     }
 }

@@ -2,8 +2,6 @@ package com.example.photogram.domain;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 public class UserDTO {
     private String username;
