@@ -4,7 +4,8 @@ import com.example.photogram.domain.User;
 import com.example.photogram.domain.UserDTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+
+@Mapper(componentModel = "spring", uses = {})
 public interface UserDTOMapper extends EntityMapper<UserDTO, User> {
 
 }

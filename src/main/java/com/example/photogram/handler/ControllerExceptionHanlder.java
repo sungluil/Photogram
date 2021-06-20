@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @ControllerAdvice
 public class ControllerExceptionHanlder {
-
-
 	@ExceptionHandler(CustomValidationException.class)
 	public String validationException(CustomValidationException e) {
 		// CMRespDto, Script 비교
@@ -24,8 +22,11 @@ public class ControllerExceptionHanlder {
 
 	@ExceptionHandler(CustomValidationApiException.class)
 	public ResponseEntity<?> validationApiException(CustomValidationApiException e) {
-		System.out.println("================================ 나 실행됨????????????????????????/");
-		System.out.println(e);
 		return new ResponseEntity<>(new CMRespDto<>(-1, e.getMessage(), e.getErrorMap()), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(CustomApiException.class)
+	public ResponseEntity<?> apiException(CustomApiException e) {
+		return new ResponseEntity<>(new CMRespDto<>(-1, e.getMessage(), null), HttpStatus.BAD_REQUEST);
 	}
 }
