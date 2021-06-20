@@ -45,6 +45,8 @@ public class UserApiController {
         }
 
         UserDTO user = userService.update(id, userDTO);
+        System.out.println("업데이트됨 >>>>>"+user);
+
         principalDetails.setUser(userDTOMapper.toEntity(user));
 
         return new CMRespDto<>(1, "회원수정완료", user);

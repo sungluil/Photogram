@@ -2,6 +2,10 @@ package com.example.photogram.service;
 
 import com.example.photogram.domain.Subscribe;
 import com.example.photogram.domain.User;
+import com.example.photogram.domain.UserDTO;
+import com.example.photogram.dto.SubscribeDTO;
+import com.example.photogram.mapper.SubscribeDTOMapper;
+import com.example.photogram.mapper.UserDTOMapper;
 import com.example.photogram.repository.SubscribeRepository;
 import com.example.photogram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,17 +20,19 @@ public class SubscribeService {
 
     private final SubscribeRepository subscribeRepository;
     private final UserRepository userRepository;
+    private final SubscribeDTOMapper subscribeDTOMapper;
+    private final UserDTOMapper userDTOMapper;
 
     @Transactional
     public void 구독하기(User user, Long toUserId) {
 
-        Subscribe subscribe = new Subscribe();
-        User byId = userRepository.findById(toUserId).get();
+        SubscribeDTO subscribeDTO = new SubscribeDTO();
+        UserDTO userDTO1 = userRepository.findById(toUserId).map(userDTOMapper::toDto).get();
 
-        subscribe.setFromUser(user);
-        subscribe.setToUser(byId);
+        subscribeDTO.setFromUser(user);
+        subscribeDTO.setToUser(userDTOMapper.toEntity(userDTO1));
 
-        subscribeRepository.save(subscribe);
+        subscribeRepository.save(subscribeDTOMapper.toEntity(subscribeDTO));
 
     }
 

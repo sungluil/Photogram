@@ -6,7 +6,6 @@ import com.example.photogram.dto.SignupDto;
 import com.example.photogram.dto.UserUpdateDto;
 import com.example.photogram.handler.CustomValidationApiException;
 import com.example.photogram.handler.CustomValidationException;
-import com.example.photogram.mapper.EntityMapper;
 import com.example.photogram.mapper.UserDTOMapper;
 import com.example.photogram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserDTOMapper userDTOMapper;
-    private final EntityMapper entityMapper;
 
 
     @Transactional
@@ -69,6 +66,7 @@ public class UserService {
         user.setPhone(userDTO.getPhone());
         user.setGender(userDTO.getGender());
 
+        System.out.println("업데이트 서비스 >>"+user);
 
         return userDTOMapper.toDto(user);
     }
