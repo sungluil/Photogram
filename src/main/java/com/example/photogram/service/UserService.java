@@ -1,9 +1,12 @@
 package com.example.photogram.service;
 
+import com.example.photogram.domain.Image;
 import com.example.photogram.domain.User;
 import com.example.photogram.domain.UserDTO;
 import com.example.photogram.dto.SignupDto;
+import com.example.photogram.dto.UserProfileDto;
 import com.example.photogram.dto.UserUpdateDto;
+import com.example.photogram.handler.CustomException;
 import com.example.photogram.handler.CustomValidationApiException;
 import com.example.photogram.handler.CustomValidationException;
 import com.example.photogram.mapper.UserDTOMapper;
@@ -15,8 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -27,6 +34,24 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserDTOMapper userDTOMapper;
 
+    @Transactional(readOnly = true)
+    public UserProfileDto 회원프로필(int pageUserId, Long principalId) {
+        UserProfileDto dto = new UserProfileDto();
+
+        // SELECT * FROM image WHERE userId = :userId;
+        User userEntity = userRepository.findById((long) pageUserId).orElseThrow(()-> {
+            throw new CustomException("해당 프로필 페이지는 없는 페이지입니다.");
+        });
+        System.out.println("실행1111111"+userEntity);
+        dto.setUser(userEntity);
+        dto.setPageOwnerState(pageUserId == principalId);
+        dto.setImageCount(userEntity.getImages().size());
+
+        List<Image> collect = dto.getUser().getImages().stream().sorted(Comparator.comparing(Image::getId).reversed()).collect(Collectors.toList());
+        dto.getUser().setImages(collect);
+
+        return dto;
+    }
 
     @Transactional
     public UserDTO signUp(SignupDto dto) {
