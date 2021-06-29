@@ -29,7 +29,7 @@ public class UserService {
 
 
     @Transactional
-    public UserDTO signUp(SignupDto dto) {
+    public User signUp(SignupDto dto) {
         log.info("signUp 실행됨>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
         Map<String, String> errorMap = new HashMap<>();
@@ -40,22 +40,27 @@ public class UserService {
         if(byUsername != null) {
             throw new CustomValidationException("유효성 검사 실패함", errorMap);
         }
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(dto, userDTO);
-        userDTO.setPassword(passwordEncoder.encode(dto.getPassword()));
-        userDTO.setRole("ROLE_USER"); // 관리자 ROLE_ADMIN
-        log.info("userDTO = {}", userDTO);
 
-        User save = userRepository.save(userDTOMapper.toEntity(userDTO));
+        User user = User
+                .builder()
+                .username(dto.getUsername())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .role("ROLE_USER")
+                .build();
 
-        log.info("save = {}", save);
+        log.info("user = {}", user);
 
-        return userDTO;
+        User save = userRepository.save(user);
+
+
+        return save;
     }
 
     @Transactional
-    public UserDTO update(Long id, UserUpdateDto userDTO) {
-        System.out.println("업데이트 실행됨>>>>>>>>>>>>>>>>>>>");
+    public User update(Long id, UserUpdateDto userDTO) {
+        System.out.println("update 실행됨>>>>>>>>>>>>>>>>>>>");
         User user = userRepository.findById(id).orElseThrow(()->new CustomValidationApiException("존재하는 아이디 입니다."));
         //UserDTO user = userRepository.findById(id).map(userDTOMapper::toDto).orElseThrow(()->new CustomValidationApiException("존재하는 아이디 입니다."));
 
@@ -68,6 +73,6 @@ public class UserService {
 
         System.out.println("업데이트 서비스 >>"+user);
 
-        return userDTOMapper.toDto(user);
+        return user;
     }
 }

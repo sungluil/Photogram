@@ -44,10 +44,10 @@ public class UserApiController {
             throw new CustomValidationApiException("유효성 검사 실패함", errorMap);
         }
 
-        UserDTO user = userService.update(id, userDTO);
+        User user = userService.update(id, userDTO);
         System.out.println("업데이트됨 >>>>>"+user);
 
-        principalDetails.setUser(userDTOMapper.toEntity(user));
+        principalDetails.setUser(user);
 
         return new CMRespDto<>(1, "회원수정완료", user);
     }
