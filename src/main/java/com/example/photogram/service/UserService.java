@@ -10,6 +10,7 @@ import com.example.photogram.handler.CustomException;
 import com.example.photogram.handler.CustomValidationApiException;
 import com.example.photogram.handler.CustomValidationException;
 import com.example.photogram.mapper.UserDTOMapper;
+import com.example.photogram.repository.SubscribeRepository;
 import com.example.photogram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final SubscribeRepository subscribeRepository;
     private final UserDTOMapper userDTOMapper;
 
     @Transactional(readOnly = true)
@@ -46,6 +48,12 @@ public class UserService {
         dto.setUser(userEntity);
         dto.setPageOwnerState(pageUserId == principalId);
         dto.setImageCount(userEntity.getImages().size());
+
+        int subscribeState =  subscribeRepository.mSubscribeState(principalId, pageUserId);
+        int subscribeCount = subscribeRepository.mSubscribeCount(pageUserId);
+
+        dto.setSubscribeState(subscribeState == 1);
+        dto.setSubscribeCount(subscribeCount);
 
         List<Image> collect = dto.getUser().getImages().stream().sorted(Comparator.comparing(Image::getId).reversed()).collect(Collectors.toList());
         dto.getUser().setImages(collect);

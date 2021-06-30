@@ -24,11 +24,21 @@ public class ImageService {
 
     @Transactional
     public void 사진업로드(ImageUploadDto imageUploadDto, PrincipalDetails principalDetails) {
+
+        /**
+         * 업로드 전략
+         * 1. 원본파일명 + 범용 고유 식별자로 저장할 파일명 생성
+         * 2. Paths.get()을 이용해 파일경로 + 파일이름으로 이미지저장경로 설정
+         * 3. Files.write 이용 파일Path 파일 getBytes()
+         * 4. 이미지테이블에 저장
+         * 5. 즉 내가설정한경로에 파일떨구고 그파일정보들중에 원하는걸 테이블에 인서트
+         */
+
         UUID uuid = UUID.randomUUID(); // uuid
         String imageFileName = uuid+"_"+imageUploadDto.getFile().getOriginalFilename(); // 1.jpg
         System.out.println("이미지 파일이름 : "+imageFileName);
 
-        Path imageFilePath = Paths.get(uploadFolder+imageFileName);
+        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
         // 통신, I/O -> 예외가 발생할 수 있다.
         try {
