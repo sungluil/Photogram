@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Setter @Getter
 @Entity // 디비에 테이블을 생성
-@ToString(of = {"id", "username", "name", "email", "images"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 번호 증가 전략이 데이터베이스를 따라간다.

@@ -1,8 +1,5 @@
 package com.example.photogram.service;
 
-import com.example.photogram.domain.Subscribe;
-import com.example.photogram.domain.User;
-import com.example.photogram.domain.UserDTO;
 import com.example.photogram.dto.SubscribeDTO;
 import com.example.photogram.handler.CustomApiException;
 import com.example.photogram.mapper.SubscribeDTOMapper;
@@ -17,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,16 +27,16 @@ public class SubscribeService {
     private final EntityManager em; // Repository는 EntityManager를 구현해서 만들어져 있는 구현체
 
     @Transactional(readOnly = true)
-    public List<SubscribeDTO> 구독리스트(Long principalId, int pageUserId){
+    public List<SubscribeDTO> 구독리스트(long principalId, int pageUserId){
 
         // 쿼리 준비
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT u.id, u.username, u.profileImageUrl, ");
-        sb.append("if ((SELECT 1 FROM subscribe WHERE fromUserId = ? AND toUserId = u.id), 1, 0) subscribeState, ");
+        sb.append("SELECT u.id, u.username, u.profile_image_url, ");
+        sb.append("if ((SELECT 1 FROM subscribe WHERE from_user_id = ? AND to_user_id = u.id), 1, 0) subscribeState, ");
         sb.append("if ((?=u.id), 1, 0) equalUserState ");
         sb.append("FROM user u INNER JOIN subscribe s ");
-        sb.append("ON u.id = s.toUserId ");
-        sb.append("WHERE s.fromUserId = ?"); // 세미콜론 첨부하면 안됨
+        sb.append("ON u.id = s.to_user_id ");
+        sb.append("WHERE s.from_user_id = ?"); // 세미콜론 첨부하면 안됨
 
         // 1.물음표 principalId
         // 2.물음표 principalId

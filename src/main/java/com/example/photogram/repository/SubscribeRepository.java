@@ -1,9 +1,13 @@
 package com.example.photogram.repository;
 
 import com.example.photogram.domain.Subscribe;
+import com.example.photogram.domain.User;
+import com.example.photogram.dto.SubscribeDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
