@@ -3,7 +3,9 @@ package com.example.photogram.service;
 import com.example.photogram.domain.User;
 import com.example.photogram.domain.UserDTO;
 import com.example.photogram.dto.SignupDto;
+import com.example.photogram.dto.UserProfileDto;
 import com.example.photogram.dto.UserUpdateDto;
+import com.example.photogram.handler.CustomException;
 import com.example.photogram.handler.CustomValidationApiException;
 import com.example.photogram.handler.CustomValidationException;
 import com.example.photogram.mapper.UserDTOMapper;
@@ -74,5 +76,22 @@ public class UserService {
         System.out.println("업데이트 서비스 >>"+user);
 
         return user;
+    }
+
+    @Transactional
+    public UserProfileDto 회원프로필(int userId, Long principalId) {
+        UserProfileDto dto = new UserProfileDto();
+
+
+
+        User userEntity = userRepository.findById((long) userId).orElseThrow(() -> {
+            throw new CustomException("해당 프로필 페이지는 없는 페이지입니다.");
+        });
+
+        dto.setUser(userEntity);
+        dto.setPageOwnerState((long) userId == principalId);
+        dto.setImageCount(userEntity.getImages().size());
+
+        return dto;
     }
 }
