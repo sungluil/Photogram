@@ -14,7 +14,6 @@ import com.example.photogram.repository.SubscribeRepository;
 import com.example.photogram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -71,7 +69,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO signUp(SignupDto dto) {
+    public User signUp(SignupDto dto) {
         log.info("signUp 실행됨>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
         Map<String, String> errorMap = new HashMap<>();
@@ -82,17 +80,15 @@ public class UserService {
         if(byUsername != null) {
             throw new CustomValidationException("유효성 검사 실패함", errorMap);
         }
-        UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(dto, userDTO);
-        userDTO.setPassword(passwordEncoder.encode(dto.getPassword()));
-        userDTO.setRole("ROLE_USER"); // 관리자 ROLE_ADMIN
-        log.info("userDTO = {}", userDTO);
+        User save = User.builder()
+                .username(dto.getUsername())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .role("ROLE_USER")
+                .email(dto.getEmail())
+                .name(dto.getName())
+                .build();
 
-        User save = userRepository.save(userDTOMapper.toEntity(userDTO));
-
-        log.info("save = {}", save);
-
-        return userDTO;
+        return userRepository.save(save);
     }
 
     @Transactional
