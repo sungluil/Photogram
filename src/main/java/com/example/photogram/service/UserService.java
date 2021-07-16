@@ -36,6 +36,15 @@ public class UserService {
     private final SubscribeRepository subscribeRepository;
     private final UserDTOMapper userDTOMapper;
 
+    public List<UserDTO> findAll() {
+        Long id = 1L;
+        userRepository.findById(id).map(UserDTO::new);
+        userRepository.findAll().stream().map(UserDTO::new);
+
+
+        return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
+    }
+
     @Transactional(readOnly = true)
     public UserProfileDto 회원프로필(int pageUserId, Long principalId) {
         UserProfileDto dto = new UserProfileDto();

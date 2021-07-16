@@ -15,4 +15,21 @@ public class UserDTO {
     private String gender;
     private String profileImageUrl; // 사진
     private String role; // 권한
+
+    public UserDTO() {
+    }
+
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.name = user.getName();
+        this.website = user.getWebsite();
+        this.bio = user.getBio();
+        this.email = user.getEmail();
+        this.phone = user.getPhone();
+        this.gender = user.getGender();
+        this.profileImageUrl = user.getProfileImageUrl();
+        this.role = user.getRole();
+    }
 }
