@@ -22,7 +22,7 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
-    private String uploadFolder = "D:/workspace/upload/";
+    private String uploadFolder = "/Users/cho/Documents/upload/";
 
     @Transactional(readOnly = true) // 영속성 컨텍스트 변경 감지를 해서, 더티체킹, flush(반영) X
     public Page<Image> 이미지스토리(Long principalId, Pageable pageable){

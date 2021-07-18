@@ -8,7 +8,7 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private String uploadFolder = "D:/workspace/upload/";
+    private String uploadFolder = "/Users/cho/Documents/upload/";
 
 
     @Override
