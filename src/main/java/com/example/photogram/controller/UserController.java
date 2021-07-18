@@ -17,7 +17,7 @@ public class UserController {
 	private final UserService userService;
 
 	@GetMapping("/user/{id}")
-	public String profile(@PathVariable int id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+	public String profile(@PathVariable int id, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) throws Exception {
 		UserProfileDto dto = userService.회원프로필(id, principalDetails.getUser().getId());
 		model.addAttribute("dto", dto);
 		return "user/profile";

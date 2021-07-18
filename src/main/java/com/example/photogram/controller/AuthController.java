@@ -37,7 +37,7 @@ public class AuthController {
     // 회원가입버튼 -> /auth/signup -> /auth/signin
     // 회원가입버튼 X
     @PostMapping("/auth/signup")
-    public String signup(@Valid SignupDto dto, Errors errors) { // key=value (x-www-form-urlencoded)
+    public String signup(@Valid SignupDto dto, Errors errors) throws Exception { // key=value (x-www-form-urlencoded)
         log.info("dto = {}", dto);
         Map<String, String> errorMap = new HashMap<>();
         if(errors.hasErrors()) {

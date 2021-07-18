@@ -44,7 +44,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserProfileDto 회원프로필(int pageUserId, Long principalId) {
+    public UserProfileDto 회원프로필(int pageUserId, Long principalId) throws Exception {
         UserProfileDto dto = new UserProfileDto();
 
         // SELECT * FROM image WHERE userId = :userId;
@@ -69,7 +69,7 @@ public class UserService {
     }
 
     @Transactional
-    public User signUp(SignupDto dto) {
+    public User signUp(SignupDto dto) throws Exception {
         log.info("signUp 실행됨>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
         Map<String, String> errorMap = new HashMap<>();
