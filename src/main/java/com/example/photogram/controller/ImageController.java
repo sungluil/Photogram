@@ -7,6 +7,7 @@ import com.example.photogram.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -17,7 +18,8 @@ public class ImageController {
 	private final ImageService imageService;
 
 	@GetMapping({"/", "/image/story"})
-	public String story() {
+	public String story(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
+		model.addAttribute("id", principalDetails.getUser().getId());
 		return "image/story";
 	}
 
