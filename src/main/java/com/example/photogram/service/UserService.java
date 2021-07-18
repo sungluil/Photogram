@@ -48,9 +48,8 @@ public class UserService {
         UserProfileDto dto = new UserProfileDto();
 
         // SELECT * FROM image WHERE userId = :userId;
-        User userEntity = userRepository.findById((long) pageUserId).orElseThrow(()-> {
-            throw new CustomException("해당 프로필 페이지는 없는 페이지입니다.");
-        });
+        User userEntity = userRepository.findById((long) pageUserId)
+                .orElseThrow(()-> new CustomException("해당 프로필 페이지는 없는 페이지입니다."));
         System.out.println("실행1111111"+userEntity);
         dto.setUser(userEntity);
         dto.setPageOwnerState(pageUserId == principalId);
