@@ -15,7 +15,7 @@ cache:
 script: "./mvnw package"
 
 before_deploy:
-  - zip -r springboot-website
+  - zip -r springboot-website *
   - mkdir -p deploy
   - mv springboot-website.zip deploy/springboot-website.zip
 
