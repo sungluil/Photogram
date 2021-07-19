@@ -39,7 +39,7 @@ deploy:
     application: springboot-website
     deployment_group: springboot-website-group
     region: ap-northeast-2
-#    wait-until-deployed: true
+    wait-until-deployed: true
 
 #CI 실행 완료 시 메일로 알람
 notifications:
