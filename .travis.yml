@@ -36,7 +36,7 @@ deploy:
     bucket: springboot-website-build
     key: springboot-website.zip
     bundle_type: zip
-#    application: springboot-website
+    application: springboot-website
 #    deployment_group: springboot-website-group
 #    region: ap-northeast-2
 #    wait-until-deployed: true
