@@ -45,4 +45,4 @@ deploy:
 notifications:
   email:
     recipients:
-      - josungluil@naver.com
+      - josungluil@naver.com #mail
