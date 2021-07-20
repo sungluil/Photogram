@@ -111,6 +111,11 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.paradoxical</groupId>
+            <artifactId>hikari_2.12</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 
